@@ -1,36 +1,41 @@
 package com.tb.appmonitor;
 
+import com.tb.appmonitor.controller.GameScriptController;
+import com.tb.appmonitor.util.Const;
+import com.tb.appmonitor.util.WinSystemUtil;
 import javafx.application.Application;
-import javafx.event.EventHandler;
-import javafx.fxml.FXMLLoader;
-import javafx.scene.Scene;
+import javafx.application.Platform;
+import javafx.scene.image.Image;
 import javafx.stage.Stage;
-import javafx.stage.WindowEvent;
+import lombok.extern.slf4j.Slf4j;
 
-import java.io.IOException;
-
+@Slf4j
 public class MainApplication extends Application {
     @Override
-    public void start(Stage stage) throws IOException {
-        FXMLLoader fxmlLoader = new FXMLLoader(MainApplication.class.getResource("main_scene.fxml"));
-        stage.setTitle("AppMonitor");
-        //初始化Scene
-        Scene scene = new Scene(fxmlLoader.load(), 320, 240);
-        stage.setScene(scene);
-        //设置Stage关闭回调
-        final MainController controller = fxmlLoader.getController();
-        stage.setOnCloseRequest(new EventHandler<WindowEvent>() {
-            @Override
-            public void handle(WindowEvent event) {
-                controller.onStageDestroyed();
-            }
+    public void start(Stage stage) {
+        //设置应用程序图标
+        stage.getIcons().add(new Image(Const.APP_ICON_FILE_NAME));
+
+        //默认为true
+        //当true时，关闭最后一个窗口，程序也关闭，将会调用Application.stop()
+        //false，关闭最后一个窗口，程序继续运行,除非使用Platform.exit()
+        Platform.setImplicitExit(false);
+
+        //设置窗口隐藏逻辑
+        stage.setOnHidden(event -> {
+            hideWindow(stage);
         });
-
-        stage.show();
-
+        //展示场景
+        GameScriptController.showScene(getClass(), stage);
     }
 
     public static void main(String[] args) {
         launch();
+    }
+
+    private void hideWindow(Stage stage) {
+        log.info("hideWindow");
+        //隐藏窗口时展示系统托盘图标
+        WinSystemUtil.initTrayIcon(stage);
     }
 }
