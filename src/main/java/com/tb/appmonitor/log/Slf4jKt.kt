@@ -1,4 +1,4 @@
-package com.tb.appmonitor.util
+package com.tb.appmonitor.log
 
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory

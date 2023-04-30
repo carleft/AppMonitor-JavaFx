@@ -5,7 +5,8 @@ import com.sun.jna.platform.win32.User32
 import com.sun.jna.platform.win32.WinDef.HWND
 import com.sun.jna.platform.win32.WinUser
 import com.sun.jna.ptr.IntByReference
-import com.tb.appmonitor.util.Slf4jKt.Companion.log
+import com.tb.appmonitor.log.Slf4jKt
+import com.tb.appmonitor.log.Slf4jKt.Companion.log
 import javafx.application.Platform
 import javafx.stage.Stage
 import java.awt.*

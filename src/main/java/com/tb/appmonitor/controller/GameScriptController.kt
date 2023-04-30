@@ -1,8 +1,10 @@
 package com.tb.appmonitor.controller
 
 import com.tb.appmonitor.game.GameMonitor
+import com.tb.appmonitor.log.JavaFxAppender
+import com.tb.appmonitor.log.Slf4jKt
 import com.tb.appmonitor.util.*
-import com.tb.appmonitor.util.Slf4jKt.Companion.log
+import com.tb.appmonitor.log.Slf4jKt.Companion.log
 import javafx.application.Application
 import javafx.fxml.FXML
 import javafx.fxml.FXMLLoader
@@ -10,8 +12,10 @@ import javafx.fxml.Initializable
 import javafx.scene.Scene
 import javafx.scene.control.Button
 import javafx.scene.control.Label
+import javafx.scene.control.TextArea
 import javafx.stage.DirectoryChooser
 import javafx.stage.Stage
+import org.apache.logging.log4j.core.LoggerContext
 import java.net.URL
 import java.util.*
 
@@ -44,6 +48,8 @@ class GameScriptController: Initializable {
     private var labelBattlenetPath: Label? = null
     @FXML
     private var labelHearthstonePath: Label? = null
+    @FXML
+    private var textAreaLog: TextArea? = null
 
     /**
      * 初始化时调用
@@ -51,6 +57,9 @@ class GameScriptController: Initializable {
     override fun initialize(location: URL?, resources: ResourceBundle?) {
         labelBattlenetPath?.text = PropertiesUtil.getProperty(Const.PROPERTIES_KEY_BATTLE_NET_FILE_PATH)
         labelHearthstonePath?.text = PropertiesUtil.getProperty(Const.PROPERTIES_KEY_HEARTHSTONE_FILE_PATH)
+
+        //初始化日志输出的控件
+        JavaFxAppender.textArea = textAreaLog
     }
 
     @FXML
