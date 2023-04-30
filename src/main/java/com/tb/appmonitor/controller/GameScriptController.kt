@@ -15,7 +15,6 @@ import javafx.scene.control.Label
 import javafx.scene.control.TextArea
 import javafx.stage.DirectoryChooser
 import javafx.stage.Stage
-import org.apache.logging.log4j.core.LoggerContext
 import java.net.URL
 import java.util.*
 
@@ -55,7 +54,7 @@ class GameScriptController: Initializable {
      * 初始化时调用
      */
     override fun initialize(location: URL?, resources: ResourceBundle?) {
-        labelBattlenetPath?.text = PropertiesUtil.getProperty(Const.PROPERTIES_KEY_BATTLE_NET_FILE_PATH)
+        labelBattlenetPath?.text = PropertiesUtil.getProperty(Const.PROPERTIES_KEY_BATTLENET_FILE_PATH)
         labelHearthstonePath?.text = PropertiesUtil.getProperty(Const.PROPERTIES_KEY_HEARTHSTONE_FILE_PATH)
 
         //初始化日志输出的控件
@@ -76,25 +75,39 @@ class GameScriptController: Initializable {
 
     @FXML
     fun onSettingBattlenetPath() {
-        val chooser = DirectoryChooser()
-        chooser.title = "请设置战网安装目录"
-        val selectFile = chooser.showDialog(Stage())
-        selectFile?.let {
-            labelBattlenetPath?.text = it.absolutePath
-            //保存配置
-            PropertiesUtil.setProperty(Const.PROPERTIES_KEY_BATTLE_NET_FILE_PATH, it.absolutePath)
+        DirectoryChooser().apply {
+            title = "请设置战网安装目录"
+        }.showDialog(Stage())?.let {
+            if (GameMonitor.isBattlenetPathVaild(it)) {
+                //路径合法，保存配置
+                log.warn("设置战网安装目录成功")
+                labelBattlenetPath?.text = it.absolutePath
+                PropertiesUtil.setProperty(Const.PROPERTIES_KEY_BATTLENET_FILE_PATH, it.absolutePath)
+            } else {
+                //路径非法
+                log.warn("设置战网安装目录失败，目标文件不存在")
+                labelBattlenetPath?.text = ""
+                PropertiesUtil.setProperty(Const.PROPERTIES_KEY_BATTLENET_FILE_PATH, "")
+            }
         }
     }
 
     @FXML
     fun onSettingHearthstonePath() {
-        val chooser = DirectoryChooser()
-        chooser.title = "请设置炉石传说安装目录"
-        val selectFile = chooser.showDialog(Stage())
-        selectFile?.let {
-            labelHearthstonePath?.text = it.absolutePath
-            //保存配置
-            PropertiesUtil.setProperty(Const.PROPERTIES_KEY_HEARTHSTONE_FILE_PATH, it.absolutePath)
+        DirectoryChooser().apply {
+            title = "请设置炉石传说安装目录"
+        }.showDialog(Stage())?.let {
+            if (GameMonitor.isHearthstonePathVaild(it)) {
+                //路径合法，保存配置
+                log.warn("设置炉石传说安装目录成功")
+                labelHearthstonePath?.text = it.absolutePath
+                PropertiesUtil.setProperty(Const.PROPERTIES_KEY_HEARTHSTONE_FILE_PATH, it.absolutePath)
+            } else {
+                //路径非法
+                log.warn("设置炉石传说安装目录失败，目标文件不存在")
+                labelHearthstonePath?.text = ""
+                PropertiesUtil.setProperty(Const.PROPERTIES_KEY_HEARTHSTONE_FILE_PATH, "")
+            }
         }
     }
 

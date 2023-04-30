@@ -2,6 +2,7 @@ package com.tb.appmonitor;
 
 import com.tb.appmonitor.controller.GameScriptController;
 import com.tb.appmonitor.util.Const;
+import com.tb.appmonitor.util.RobotUtil;
 import com.tb.appmonitor.util.WinSystemUtil;
 import javafx.application.Application;
 import javafx.application.Platform;
@@ -13,6 +14,9 @@ import lombok.extern.slf4j.Slf4j;
 public class MainApplication extends Application {
     @Override
     public void start(Stage stage) {
+        //初始化RobotUtil类
+        //TODO:更优雅的实现方式
+        RobotUtil.INSTANCE.getRobot();
         //设置应用程序图标
         stage.getIcons().add(new Image(Const.APP_ICON_FILE_NAME));
 

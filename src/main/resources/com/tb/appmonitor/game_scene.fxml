@@ -38,6 +38,6 @@
 
     <Button fx:id="btnStart" onAction="#onStartClick" text="Start Monitor!" />
     <Button fx:id="btnEnd" onAction="#onEndClick" text="End Monitor!" />
-    <TextArea fx:id="textAreaLog" prefHeight="200.0" prefWidth="200.0" text="&#10;" editable="false" />
+    <TextArea fx:id="textAreaLog" editable="false" minHeight="-Infinity" minWidth="-Infinity" prefHeight="200.0" prefWidth="600.0" text="&#10;" />
 
 </VBox>

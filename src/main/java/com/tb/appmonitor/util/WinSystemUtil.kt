@@ -73,7 +73,7 @@ object WinSystemUtil {
     @JvmStatic
     fun getHWNDByTitle(windowTitle: String): HWND? {
         return User32.INSTANCE.FindWindow(null, windowTitle).also {
-            log.info("getHWNDByTitle, HWND: $it")
+            log.info("getHWNDByTitle, windowTitle: $windowTitle, HWND: $it")
         }
     }
 
@@ -84,7 +84,7 @@ object WinSystemUtil {
      */
     @JvmStatic
     fun runExe(exeAbsolutePath: String) {
-        log.info("runExe")
+        log.info("runExe, path: $exeAbsolutePath")
         try {
             val command = "cmd /c \"$exeAbsolutePath\""
             Runtime.getRuntime().exec(command)
@@ -94,14 +94,14 @@ object WinSystemUtil {
     }
 
     /**
-     * 通过窗口名称将窗口置于前台
+     * 将窗口置于前台
      */
     @JvmStatic
-    fun setWindowForegroundByTitle(windowTitle: String) {
-        val hwnd: HWND? = User32.INSTANCE.FindWindow(null, windowTitle)
-        val currentForegroundWindow = User32.INSTANCE.GetForegroundWindow()
-        log.info("setWindowForegroundByTitle, hwnd: $hwnd, currentForegroundWindow: $currentForegroundWindow")
+    fun setWindowForeground(hwnd: HWND?) {
+        log.info("setWindowForeground, hwnd: $hwnd")
         hwnd?.let {
+            val currentForegroundWindow = User32.INSTANCE.GetForegroundWindow()
+            log.info("currentForegroundWindow: $currentForegroundWindow")
             if (it != currentForegroundWindow) {
                 // 最小化窗口
                 User32.INSTANCE.ShowWindow(it, User32.SW_MINIMIZE)
@@ -111,6 +111,17 @@ object WinSystemUtil {
                 User32.INSTANCE.SetForegroundWindow(it)
             }
         }
+    }
+
+    /**
+     * 通过窗口名称将窗口置于前台
+     */
+    @JvmStatic
+    fun setWindowForegroundByTitle(windowTitle: String) {
+        User32.INSTANCE.FindWindow(null, windowTitle).also {
+            setWindowForeground(it)
+        }
+
     }
 
     /**
